@@ -32,14 +32,24 @@ public class BST<T extends Comparable<? super T>> {
         // Post:  (in the new node)
         //        element == elem
         //        left == right == null
-        public BinaryNode( T elem ) { //TODO
+        public BinaryNode( T elem ) {
+
+            this.element = elem;
+            this.right = null;
+            this.left = null;
+
         }
         // Initialize a binary node with children.
         // Pre:   elem is not null
         // Post:  (in the new node)
         //        element == elem
         //        left == lt, right == rt
-        public BinaryNode( T elem, BinaryNode lt, BinaryNode rt ) { //TODO
+        public BinaryNode( T elem, BinaryNode lt, BinaryNode rt ) {
+
+            this.element = elem;
+            this.right = rt;
+            this.left = lt;
+
         }
 
         T          element;  // the data in the node
@@ -55,20 +65,36 @@ public class BST<T extends Comparable<? super T>> {
     // Pre:   none
     // Post:  (in the new tree)
     //        root == null, pool == null, pSize = 0
-    public BST( ) { //TODO
+    public BST() {
+
+        this.root = null;
+        this.pool = null;
+        this.pSize = 0;
     }
 
     // Initialize empty BST with a node pool of up to pSize nodes.
     // Pre:   none
     // Post:  (in the new tree)
     //        root == null, pool = null, pSize == Sz 
-    public BST( int Sz ) { //TODO
+    public BST( int Sz ) {
+
+        this.root = null;
+        this.pool = null;
+        this.pSize = Sz;
+
     }
 
     // Return true iff BST contains no nodes.
     // Pre:   none
     // Post:  the binary tree is unchanged
-    public boolean isEmpty( ) { return false;}
+    public boolean isEmpty( ) {
+
+        if(this.root == null){
+            return true;
+        }
+
+        return false;
+    }
 
     // Return pointer to matching data element, or null if no matching
     // element exists in the BST.  "Matching" should be tested using the
