@@ -101,13 +101,96 @@ public class BST<T extends Comparable<? super T>> {
     // data object's compareTo() method.
     // Pre:  x is null or points to a valid object of type T
     // Post: the binary tree is unchanged
-    public T find( T x ) { return null;}
+    public T find( T x ) {
+
+        if(x == null){
+            return null;
+        }
+
+        BinaryNode foundNode = findHelper(this.root , x);
+
+        // Will be null when the value isn't in the tree
+        if(foundNode == null){
+            return null;
+        }
+
+        return foundNode.element;
+    }
+
+    /***
+     * Performs the actual Binary Searching to find the element
+     * @param node node that is being parsed
+     * @param soughtValue element that is being looked for
+     * @return element that was saught for
+     *         null otherwise
+     */
+    private BinaryNode findHelper(BinaryNode node, T soughtValue){
+
+        if(node == null){
+            return null;
+        }
+
+        int comparedResult = soughtValue.compareTo(node.element);
+
+        // Will be true when the node is greater than the soughtValue
+        if(comparedResult > 0){
+            findHelper(node.left , soughtValue);
+            // Will be true when the node element is greater than soughtValue
+        } else if (comparedResult < 0){
+            findHelper(node.right , soughtValue);
+        }
+
+        return node;
+    }
 
     // Insert element x into BST, unless it is already stored.  Return true
     // if insertion is performed and false otherwise.
     // Pre:   x is null or points to a valid object of type T
     // Post:  the binary tree contains x
-    public boolean insert( T x ) { return false; }
+    public boolean insert( T x ) {
+
+        if(x == null){
+            return false;
+        }
+
+        BinaryNode nodeResult = insertHelper(this.root , x);
+
+        // Will execute when the value wasn't inserted
+        if(nodeResult == null){
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    /***
+     * Inserts an element into the Binary Search Tree
+     * @param node current Node that is being processed
+     * @param soughtValue element that is being inserted
+     * @return BinaryNode if the element was inserted
+     *         null if the element already existed in the tree
+     */
+    private BinaryNode insertHelper(BinaryNode node , T soughtValue){
+
+        // Will be true when the correct spot has been found
+        if(node == null){
+            return new BinaryNode(soughtValue);
+        }
+
+        int comparedResult = soughtValue.compareTo(node.element);
+        // Will be true when the node is greater than the soughtValue
+        if(comparedResult > 0){
+            insertHelper(node.left, soughtValue);
+            // Will be true when the node element is greater than soughtValue
+        } else if (comparedResult < 0){
+            insertHelper(node.right, soughtValue);
+        }
+
+        return null;
+    }
+
 
     // Delete element matching x from the BST, if present.  Return true if
     // matching element is removed from the tree and false otherwise.
@@ -126,7 +209,8 @@ public class BST<T extends Comparable<? super T>> {
     // Return the tree to an empty state.
     // Pre:   none
     // Post:  the binary tree contains no elements
-    public void clear( ) { //TODO
+    public void clear( ) {
+        this.root = null;
     }
 
     // Return true iff other is a BST that has the same physical structure
