@@ -202,7 +202,11 @@ public class BST<T extends Comparable<? super T>> {
             return false;
         }
 
-        return false;
+        BinaryNode node = removeHelper(this.root, x);
+        if(node == null){
+            return false;
+        }
+        return true;
     }
 
 
@@ -289,6 +293,10 @@ public class BST<T extends Comparable<? super T>> {
     // Post:  if the tree contains no value y such that compareTo()
     //           indicates y > x
     public void cap( T x ) { //TODO
+    }
+
+    private BinaryNode capHelper(BinaryNode node , T ceilingValue){
+        return null;
     }
 
     // Return the tree to an empty state.
