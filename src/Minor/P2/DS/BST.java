@@ -153,8 +153,7 @@ public class BST<T extends Comparable<? super T>> {
             return false;
         }
 
-        BinaryNode nodeResult = insertHelper(this.root , x);
-
+        BinaryNode nodeResult = insertHelper(this.root, x);
         // Will execute when the value wasn't inserted
         if(nodeResult == null){
             return false;
@@ -182,10 +181,10 @@ public class BST<T extends Comparable<? super T>> {
         int comparedResult = soughtValue.compareTo(node.element);
         // Will be true when the node is greater than the soughtValue
         if(comparedResult > 0){
-            insertHelper(node.left, soughtValue);
+            node.left = insertHelper(node.left, soughtValue);
             // Will be true when the node element is greater than soughtValue
         } else if (comparedResult < 0){
-            insertHelper(node.right, soughtValue);
+            node.right = insertHelper(node.right, soughtValue);
         }
 
         return null;
@@ -196,7 +195,93 @@ public class BST<T extends Comparable<? super T>> {
     // matching element is removed from the tree and false otherwise.
     // Pre:   x is null or points to a valid object of type T
     // Post:  the binary tree does not contain x
-    public boolean remove( T x ) { return false; }
+    public boolean remove( T x ) {
+
+        // Error checking
+        if(x == null){
+            return false;
+        }
+
+        return false;
+    }
+
+
+    /***
+     * Removes a node from the tree
+     * @param node current node that is being processed
+     * @param soughtValue value that is being sought
+     * @return deleted BinaryNode
+     *         null otherwise
+     */
+    private BinaryNode removeHelper(BinaryNode node , T soughtValue){
+
+        if(node == null){
+            return null;
+        }
+
+        int compareResult = soughtValue.compareTo(node.element);
+        // Will be true when the node is greater than the soughtValue
+        if(compareResult > 0){
+            node.left = removeHelper(node.left, soughtValue);
+            // Will be true when the node element is greater than soughtValue
+        } else if (compareResult < 0){
+            node.right = removeHelper(node.right, soughtValue);
+            // We've found the node
+        } else {
+
+            if(node.left == null){
+                return node.right;
+            } else if (node.right == null){
+                return node.left;
+                // Node has two children
+            } else {
+
+                BinaryNode maxNode = getMaxBinaryNode(node.left);
+                node.element = maxNode.element;
+                node.left = deleteMaxBinaryNode(node.left);
+            }
+        }
+        return node;
+    }
+
+
+    /***
+     * Returns the largest Node in a Binary Tree
+     * @param node current BinaryNode that is being processed
+     * @return largest BinaryNode in a tree
+     *         null otherwise
+     */
+    private BinaryNode getMaxBinaryNode(BinaryNode node){
+
+        if(node == null){
+            return null;
+        } else if(node.right == null){
+            return node;
+        }
+
+        return getMaxBinaryNode(node.right);
+    }
+
+    /***
+     * Deletes the largest BinaryNode in a tree
+     * @param node currentNode that is being processed
+     * @return BinaryNode that was deleted
+     *         null otherwise
+     */
+    private BinaryNode deleteMaxBinaryNode(BinaryNode node){
+
+        // error checking
+        if(node == null){
+            return null;
+        } else if(node.right == null){
+            return node.left;
+        }
+
+        node.right = deleteMaxBinaryNode(node.right);
+        return node;
+    }
+
+
 
     // Remove from the tree all values y such that y > x, according to
     // compareTo().
@@ -224,5 +309,22 @@ public class BST<T extends Comparable<? super T>> {
     // Return number of levels in the tree.  (An empty tree has 0 levels.)
     // Pre:   tree is a valid BST<> object
     // Post:  the binary tree is unchanged
-    public int levels() { return -1; }
+    public int levels() {
+
+        return levelsHelper(this.root);
+    }
+
+    /***
+     * Returns the number of levels in a tree
+     * @param node current node that is being processed
+     * @return number of levels below the node
+     */
+    private int levelsHelper(BinaryNode node){
+
+        if (node == null){
+            return 0;
+        }
+
+        return 1 + Math.max(levelsHelper(node.left) , levelsHelper(node.right));
+    }
 }
