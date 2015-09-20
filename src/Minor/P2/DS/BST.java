@@ -134,10 +134,10 @@ public class BST<T extends Comparable<? super T>> {
 
         // Will be true when the node is greater than the soughtValue
         if(comparedResult > 0){
-            findHelper(node.left , soughtValue);
+            return findHelper(node.right , soughtValue);
             // Will be true when the node element is greater than soughtValue
         } else if (comparedResult < 0){
-            findHelper(node.right , soughtValue);
+            return findHelper(node.left , soughtValue);
         }
 
         return node;
@@ -151,12 +151,14 @@ public class BST<T extends Comparable<? super T>> {
 
         if(x == null){
             return false;
-        }
-
-        BinaryNode nodeResult = insertHelper(this.root, x);
-        // Will execute when the value wasn't inserted
-        if(nodeResult == null){
-            return false;
+        } else if (this.root == null){
+            this.root = new BinaryNode(x);
+        } else {
+            // Checks to see if the value is in the tree or not
+            if(find(x) != null){
+                return false;
+            }
+            this.root = insertHelper(this.root, x);
         }
 
         return true;
@@ -181,13 +183,13 @@ public class BST<T extends Comparable<? super T>> {
         int comparedResult = soughtValue.compareTo(node.element);
         // Will be true when the node is greater than the soughtValue
         if(comparedResult > 0){
-            node.left = insertHelper(node.left, soughtValue);
+            node.right = insertHelper(node.right, soughtValue);
             // Will be true when the node element is greater than soughtValue
         } else if (comparedResult < 0){
-            node.right = insertHelper(node.right, soughtValue);
+            node.left = insertHelper(node.left, soughtValue);
         }
 
-        return null;
+        return node;
     }
 
 
@@ -202,10 +204,14 @@ public class BST<T extends Comparable<? super T>> {
             return false;
         }
 
-        BinaryNode node = removeHelper(this.root, x);
-        if(node == null){
+        if(find(x) == null){
             return false;
         }
+
+        this.root = removeHelper(this.root, x);
+//        if(node == null){
+//            return false;
+//        }
         return true;
     }
 
@@ -226,10 +232,10 @@ public class BST<T extends Comparable<? super T>> {
         int compareResult = soughtValue.compareTo(node.element);
         // Will be true when the node is greater than the soughtValue
         if(compareResult > 0){
-            node.left = removeHelper(node.left, soughtValue);
+            node.right = removeHelper(node.right, soughtValue);
             // Will be true when the node element is greater than soughtValue
         } else if (compareResult < 0){
-            node.right = removeHelper(node.right, soughtValue);
+            node.left = removeHelper(node.left, soughtValue);
             // We've found the node
         } else {
 
