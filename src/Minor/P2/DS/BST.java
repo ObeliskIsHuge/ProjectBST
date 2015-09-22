@@ -24,6 +24,25 @@ package Minor.P2.DS;
 //   - compareTo() and equals() are consistent; that is, compareTo()
 //     returns 0 in exactly the same situations equals() returns true
 //
+
+//On my honor:
+//
+//- I have not discussed the Java language code in my program with
+//anyone other than my instructor or the teaching assistants
+//assigned to this course.
+//
+//- I have not used Java language code obtained from another student,
+//or any other unauthorized source, either modified or unmodified.
+//
+//- If any Java language code or documentation used in my program
+//was obtained from another source, such as a text book or course
+//notes, that has been clearly noted with a proper citation in
+//the comments of my program.
+//
+//- I have not designed this program in such a way as to defeat or
+//interfere with the normal operation of the Curator System.
+//
+//<Brandon Emerson Potts>
 public class BST<T extends Comparable<? super T>> {
 
     class BinaryNode {
@@ -246,9 +265,9 @@ public class BST<T extends Comparable<? super T>> {
                 // Node has two children
             } else {
 
-                BinaryNode maxNode = getMaxBinaryNode(node.left);
-                node.element = maxNode.element;
-                node.left = deleteMaxBinaryNode(node.left);
+                BinaryNode minNode = getMinBinaryNode(node.right);
+                node.element = minNode.element;
+                node.right = deleteMinBinaryNode(node.right);
             }
         }
         return node;
@@ -261,15 +280,13 @@ public class BST<T extends Comparable<? super T>> {
      * @return largest BinaryNode in a tree
      *         null otherwise
      */
-    private BinaryNode getMaxBinaryNode(BinaryNode node){
+    private BinaryNode getMinBinaryNode(BinaryNode node){
 
-        if(node == null){
-            return null;
-        } else if(node.right == null){
+        if(node.left == null){
             return node;
         }
 
-        return getMaxBinaryNode(node.right);
+        return getMinBinaryNode(node.left);
     }
 
     /***
@@ -278,16 +295,13 @@ public class BST<T extends Comparable<? super T>> {
      * @return BinaryNode that was deleted
      *         null otherwise
      */
-    private BinaryNode deleteMaxBinaryNode(BinaryNode node){
+    private BinaryNode deleteMinBinaryNode(BinaryNode node){
 
-        // error checking
-        if(node == null){
-            return null;
-        } else if(node.right == null){
-            return node.left;
+        if(node.left == null){
+            return node.right;
         }
 
-        node.right = deleteMaxBinaryNode(node.right);
+        node.left = deleteMinBinaryNode(node.left);
         return node;
     }
 
@@ -318,7 +332,34 @@ public class BST<T extends Comparable<? super T>> {
     // Pre:   other is null or points to a valid BST<> object, instantiated
     //           on the same data type as the tree on which equals() is invoked
     // Post:  both binary trees are unchanged
-    public boolean equals(Object other) { return false; }
+    public boolean equals(Object other) {
+
+        if (other == null){
+            return false;
+        }
+        BST node = (BST)other;
+        return equalsHelper(this.root , node.root);
+    }
+
+    /****
+     *  Performs the compare operation
+     * @param node first node that is being compared
+     * @param comparedNode second node that is being compared
+     * @return true if the trees are equal
+     *         false otherwise 
+     */
+    private boolean equalsHelper(BinaryNode node , BinaryNode comparedNode){
+
+        if (node == null || comparedNode == null) {
+            return node == comparedNode;
+        } else if (comparedNode.equals(node)) {
+            return true;
+        }
+
+        return ((node.element == comparedNode.element)
+                && equalsHelper(node.left, comparedNode.left)
+                && equalsHelper(node.right, comparedNode.right));
+    }
 
     // Return number of levels in the tree.  (An empty tree has 0 levels.)
     // Pre:   tree is a valid BST<> object
