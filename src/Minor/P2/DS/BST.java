@@ -266,8 +266,10 @@ public class BST<T extends Comparable<? super T>> {
             } else {
 
                 BinaryNode minNode = getMinBinaryNode(node.right);
-                node.element = minNode.element;
                 node.right = deleteMinBinaryNode(node.right);
+                minNode.left = node.left;
+                minNode.right = node.right;
+                return minNode;
             }
         }
         return node;
